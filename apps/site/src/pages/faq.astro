@@ -1,0 +1,21 @@
+---
+import { FAQ_QUERY } from "@jav/content";
+import FaqList from "@/components/FaqList.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import Layout from "@/layouts/Layout.astro";
+import { sanity } from "@/lib/sanity";
+
+const faqs = await sanity.fetch(FAQ_QUERY);
+const lead = "Common questions, answered.";
+---
+
+<Layout title="FAQ" description={lead}>
+	<PageHeader title="FAQ" lead={lead} />
+	{
+		faqs.length === 0 ? (
+			<p class="mt-10 text-muted">No questions published yet.</p>
+		) : (
+			<FaqList items={faqs} class="mt-10" />
+		)
+	}
+</Layout>

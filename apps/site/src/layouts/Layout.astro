@@ -1,0 +1,57 @@
+---
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import { getSite } from "@/lib/site";
+import "@/styles/global.css";
+
+interface Props {
+	title: string;
+	description?: string | null;
+	ogImage?: string;
+	noindex?: boolean;
+}
+
+const site = await getSite();
+const { title, description = site.description, ogImage, noindex } = Astro.props;
+const hero = Astro.slots.has("hero");
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = ogImage ? new URL(ogImage, Astro.site) : undefined;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonical} />
+		{noindex && <meta name="robots" content="noindex" />}
+		<link rel="sitemap" href="/sitemap-index.xml" />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={site.legalName} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonical} />
+		<meta name="twitter:card" content={ogImageUrl ? "summary_large_image" : "summary"} />
+		{ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+	</head>
+	<body class="flex min-h-dvh flex-col">
+		<a
+			href="#main"
+			class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-ink focus:px-4 focus:py-2 focus:text-small focus:text-paper"
+		>
+			Skip to content
+		</a>
+		<Header />
+		<main id="main" class="flex-1">
+			<slot name="hero" />
+			<div class:list={["container-page", hero ? "pb-12 md:pb-16" : "py-12 md:py-16"]}>
+				<slot />
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

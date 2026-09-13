@@ -1,0 +1,34 @@
+---
+import type { FAQ_QUERY_RESULT } from "@jav/content";
+import { renderBlocks } from "@/lib/portableText";
+
+interface Props {
+	items: FAQ_QUERY_RESULT;
+	class?: string;
+}
+
+const { items, class: className } = Astro.props;
+---
+
+<div class:list={["max-w-prose border-b border-border", className]}>
+	{
+		items.map((faq) => (
+			<details class="group border-t border-border">
+				<summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-h4 font-semibold text-ink [&::-webkit-details-marker]:hidden">
+					{faq.question}
+					<svg
+						class="shrink-0 text-accent-600 transition-transform duration-200 group-open:rotate-45"
+						width="18"
+						height="18"
+						viewBox="0 0 24 24"
+						fill="none"
+						aria-hidden="true"
+					>
+						<path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.75" />
+					</svg>
+				</summary>
+				<div class="prose pb-6" set:html={renderBlocks(faq.answer)} />
+			</details>
+		))
+	}
+</div>

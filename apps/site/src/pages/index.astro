@@ -1,0 +1,53 @@
+---
+import { PAGES_QUERY } from "@jav/content";
+import Button from "@/components/Button.astro";
+import Layout from "@/layouts/Layout.astro";
+import { focalPoint, urlFor } from "@/lib/image";
+import { sanity } from "@/lib/sanity";
+import { getSite } from "@/lib/site";
+
+const site = await getSite();
+const pages = await sanity.fetch(PAGES_QUERY);
+const hero = site.heroImage;
+---
+
+<Layout title={`${site.legalName} — ${site.tagline}`}>
+	<section slot="hero" class="relative isolate border-b border-border">
+		{
+			hero && (
+				<img
+					src={urlFor(hero).width(2000).fit("max").auto("format").url()}
+					alt={hero.alt ?? ""}
+					class="absolute inset-0 -z-10 size-full object-cover"
+					style={{ objectPosition: focalPoint(hero) }}
+				/>
+			)
+		}
+		{hero && <div class="absolute inset-0 -z-10 bg-ink/55"></div>}
+		<div class:list={["container-page py-24 md:py-32", hero && "text-paper"]}>
+			<h1 class="max-w-3xl text-h1">{site.tagline}</h1>
+			<p class:list={["mt-6 max-w-prose text-lead", hero ? "text-paper/85" : "text-muted"]}>
+				{site.description}
+			</p>
+			<Button href="/contact" class="mt-8">Get in touch</Button>
+		</div>
+	</section>
+
+	{
+		pages.length > 0 && (
+			<section>
+				<h2 class="text-h2">Pages</h2>
+				<ul class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+					{pages.map((page) => (
+						<li class="rounded-lg border border-border p-6 transition-colors hover:border-rule">
+							<a href={`/${page.slug}`} class="block">
+								<h3 class="text-h3">{page.title}</h3>
+								{page.summary && <p class="mt-2 text-small text-muted">{page.summary}</p>}
+							</a>
+						</li>
+					))}
+				</ul>
+			</section>
+		)
+	}
+</Layout>

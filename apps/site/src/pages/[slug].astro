@@ -1,0 +1,21 @@
+---
+import { PAGE_BY_SLUG_QUERY, PAGE_SLUGS_QUERY } from "@jav/content";
+import PageHeader from "@/components/PageHeader.astro";
+import Layout from "@/layouts/Layout.astro";
+import { renderBlocks } from "@/lib/portableText";
+import { sanity } from "@/lib/sanity";
+
+export async function getStaticPaths() {
+	const slugs = await sanity.fetch(PAGE_SLUGS_QUERY);
+	return slugs.map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const page = await sanity.fetch(PAGE_BY_SLUG_QUERY, { slug });
+if (!page) return Astro.rewrite("/404");
+---
+
+<Layout title={page.title} description={page.summary}>
+	<PageHeader title={page.title} lead={page.summary} />
+	{page.body && <div class="prose mt-10" set:html={renderBlocks(page.body)} />}
+</Layout>

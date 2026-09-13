@@ -1,0 +1,16 @@
+packages:
+  - apps/*
+  - packages/*
+
+allowBuilds:
+  esbuild: true
+  sharp: true
+  "@biomejs/biome": true
+  workerd: true
+
+overrides:
+  # Cloudflare ships daily; these pins keep the tree inside the minimumReleaseAge policy.
+  # Bump deliberately once each release clears the age window.
+  wrangler: "4.131.1"
+  workerd: "1.20260911.1"
+  miniflare: "5.20260911.0-alpha"
