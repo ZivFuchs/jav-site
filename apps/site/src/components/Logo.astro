@@ -1,0 +1,11 @@
+---
+import type { Variant } from "@/experiments/registry";
+
+interface Props {
+	variant: Variant<"logo-size">;
+}
+
+const height = { large: 44, small: 32 }[Astro.props.variant];
+---
+
+<img src="/logo.svg" alt="" height={height} width={Math.round((height * 152) / 158)} />

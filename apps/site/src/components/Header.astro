@@ -1,4 +1,6 @@
 ---
+import Logo from "@/components/Logo.astro";
+import Experiment from "@/experiments/Experiment.astro";
 import { getSite, nav } from "@/lib/site";
 
 const site = await getSite();
@@ -10,7 +12,10 @@ const path = Astro.url.pathname;
 	class="sticky top-0 z-40 border-b border-border bg-paper focus-within:translate-y-0 data-hidden:-translate-y-full motion-safe:transition-transform motion-safe:duration-200"
 >
 	<div class="container-page flex h-16 items-center justify-between gap-6">
-		<a href="/" class="font-display text-h4 font-semibold tracking-tight">{site.name}</a>
+		<a href="/" class="flex items-center gap-2.5 font-display text-h4 font-semibold tracking-tight">
+			<Experiment id="logo-size" component={Logo} />
+			{site.name}
+		</a>
 		<nav aria-label="Main">
 			<ul class="flex items-center gap-6 text-small">
 				{

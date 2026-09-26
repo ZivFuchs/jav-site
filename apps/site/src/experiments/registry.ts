@@ -7,6 +7,11 @@ interface ExperimentDef {
 }
 
 export const experiments = {
+	"logo-size": {
+		label: "Logo size",
+		scope: "global",
+		variants: { large: "Large (44px)", small: "Small (32px)" },
+	},
 	"home-about": {
 		label: "Home: About section",
 		scope: "page",

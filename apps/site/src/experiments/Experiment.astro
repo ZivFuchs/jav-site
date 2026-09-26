@@ -1,26 +1,30 @@
 ---
 import { type ExperimentId, experimentsEnabled, type Variant, variantsOf } from "./registry";
 
-interface Props<K extends ExperimentId, P extends Record<string, unknown>> {
-	id: K;
-	variants: Record<Variant<K>, (props: P) => unknown>;
-	props: P;
-}
+/** Pass one component per variant, or a single `component` that receives the variant as a prop. */
+type Props<K extends ExperimentId, P extends Record<string, unknown>> = { id: K } & (
+	| { variants: Record<Variant<K>, (props: P) => unknown>; props: P }
+	| { component: (props: P & { variant: Variant<K> }) => unknown; props?: P }
+);
 
-const { id, variants, props } = Astro.props;
+const { id, props } = Astro.props;
 const [first, ...rest] = variantsOf(id);
 const rendered = experimentsEnabled ? [first, ...rest] : [first];
+const render = (v: (typeof rendered)[number]) =>
+	"component" in Astro.props
+		? { Component: Astro.props.component, attrs: { ...props, variant: v } }
+		: { Component: Astro.props.variants[v], attrs: props };
 ---
 
 {
 	rendered.map((v) => {
-		const Component = variants[v];
+		const { Component, attrs } = render(v);
 		return experimentsEnabled ? (
 			<div data-x={id} data-v={v}>
-				<Component {...props} />
+				<Component {...attrs} />
 			</div>
 		) : (
-			<Component {...props} />
+			<Component {...attrs} />
 		);
 	})
 }
