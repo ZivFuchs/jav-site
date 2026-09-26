@@ -124,6 +124,20 @@ export type SiteSettings = {
   legalName: string;
   tagline: string;
   description: string;
+  email: string;
+  socials?: Array<
+    {
+      _key: string;
+    } & Social
+  >;
+};
+
+export type Home = {
+  _id: string;
+  _type: "home";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
   heroImage?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -132,12 +146,8 @@ export type SiteSettings = {
     alt?: string;
     _type: "image";
   };
-  email: string;
-  socials?: Array<
-    {
-      _key: string;
-    } & Social
-  >;
+  headline: string;
+  subtext?: string;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -247,6 +257,7 @@ export type AllSanitySchemaTypes =
   | SanityImageHotspot
   | Slug
   | SiteSettings
+  | Home
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -258,12 +269,24 @@ export type AllSanitySchemaTypes =
 
 // Source: ../../packages/content/src/queries.ts
 // Variable: SITE_SETTINGS_QUERY
-// Query: *[_type == "siteSettings" && _id == "siteSettings"][0]{	name, legalName, tagline, description, heroImage, email, socials[]{label, url, icon}}
+// Query: *[_type == "siteSettings" && _id == "siteSettings"][0]{	name, legalName, tagline, description, email, socials[]{label, url, icon}}
 export type SITE_SETTINGS_QUERY_RESULT = {
   name: string;
   legalName: string;
   tagline: string;
   description: string;
+  email: string;
+  socials: Array<{
+    label: string;
+    url: string;
+    icon: string;
+  }> | null;
+} | null;
+
+// Source: ../../packages/content/src/queries.ts
+// Variable: HOME_QUERY
+// Query: *[_type == "home" && _id == "home"][0]{heroImage, headline, subtext}
+export type HOME_QUERY_RESULT = {
   heroImage: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -272,12 +295,8 @@ export type SITE_SETTINGS_QUERY_RESULT = {
     alt?: string;
     _type: "image";
   } | null;
-  email: string;
-  socials: Array<{
-    label: string;
-    url: string;
-    icon: string;
-  }> | null;
+  headline: string;
+  subtext: string | null;
 } | null;
 
 // Source: ../../packages/content/src/queries.ts
@@ -335,7 +354,8 @@ export type FAQ_QUERY_RESULT = Array<{
 // Query TypeMap
 declare global {
   interface SanityQueries {
-    '*[_type == "siteSettings" && _id == "siteSettings"][0]{\n\tname, legalName, tagline, description, heroImage, email, socials[]{label, url, icon}\n}': SITE_SETTINGS_QUERY_RESULT;
+    '*[_type == "siteSettings" && _id == "siteSettings"][0]{\n\tname, legalName, tagline, description, email, socials[]{label, url, icon}\n}': SITE_SETTINGS_QUERY_RESULT;
+    '*[_type == "home" && _id == "home"][0]{heroImage, headline, subtext}': HOME_QUERY_RESULT;
     '*[_type == "page" && defined(slug.current)]|order(coalesce(order, 9999) asc, title asc){\n\t_id, title, "slug": slug.current, summary, coverImage\n}': PAGES_QUERY_RESULT;
     '*[_type == "page" && defined(slug.current)].slug.current': PAGE_SLUGS_QUERY_RESULT;
     '*[_type == "page" && slug.current == $slug][0]{\n\t_id, title, "slug": slug.current, summary, coverImage, body, publishedAt\n}': PAGE_BY_SLUG_QUERY_RESULT;

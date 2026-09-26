@@ -2,10 +2,17 @@
 import type { HTMLAttributes } from "astro/types";
 
 interface Props extends Pick<HTMLAttributes<"a">, "href" | "target" | "rel"> {
-	variant?: "primary" | "ghost";
+	variant?: keyof typeof variants;
 	type?: "button" | "submit";
 	class?: string;
 }
+
+const variants = {
+	primary: "bg-accent-600 text-paper hover:bg-accent-700",
+	ghost: "border border-rule text-ink hover:bg-neutral-100",
+	/** Ghost for dark or photographic backgrounds. */
+	light: "border border-paper/70 text-paper hover:bg-paper/10",
+} as const;
 
 const {
 	href,
@@ -18,11 +25,6 @@ const {
 
 const base =
 	"inline-flex items-center justify-center rounded-md px-5 py-2.5 text-small font-medium transition-colors";
-const variants = {
-	primary: "bg-accent-600 text-paper hover:bg-accent-700",
-	ghost: "border border-rule text-ink hover:bg-neutral-100",
-} as const;
-
 const cls = [base, variants[variant], className].filter(Boolean).join(" ");
 ---
 

@@ -2,8 +2,12 @@ import { defineQuery } from "groq";
 
 export const SITE_SETTINGS_QUERY =
 	defineQuery(`*[_type == "siteSettings" && _id == "siteSettings"][0]{
-	name, legalName, tagline, description, heroImage, email, socials[]{label, url, icon}
+	name, legalName, tagline, description, email, socials[]{label, url, icon}
 }`);
+
+export const HOME_QUERY = defineQuery(
+	`*[_type == "home" && _id == "home"][0]{heroImage, headline, subtext}`,
+);
 
 export const PAGES_QUERY =
 	defineQuery(`*[_type == "page" && defined(slug.current)]|order(coalesce(order, 9999) asc, title asc){

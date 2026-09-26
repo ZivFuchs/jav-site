@@ -22,7 +22,7 @@ export const siteSettings = defineType({
 		defineField({
 			name: "tagline",
 			type: "string",
-			description: "One line, used as the homepage headline",
+			description: "One line, used in the homepage title",
 			validation: (rule) => rule.required().max(120),
 		}),
 		defineField({
@@ -31,14 +31,6 @@ export const siteSettings = defineType({
 			rows: 3,
 			description: "Default meta description, used when a page sets none",
 			validation: (rule) => rule.required().max(200),
-		}),
-		defineField({
-			name: "heroImage",
-			title: "Hero image",
-			type: "image",
-			options: { hotspot: true },
-			description: "Full-bleed background behind the homepage headline",
-			fields: [defineField({ name: "alt", type: "string", title: "Alternative text" })],
 		}),
 		defineField({
 			name: "email",

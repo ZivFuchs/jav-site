@@ -666,6 +666,72 @@
         },
         "optional": false
       },
+      "email": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": false
+      },
+      "socials": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "array",
+          "of": {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "social"
+            }
+          }
+        },
+        "optional": true
+      }
+    }
+  },
+  {
+    "name": "home",
+    "type": "document",
+    "attributes": {
+      "_id": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_type": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string",
+          "value": "home"
+        }
+      },
+      "_createdAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_updatedAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_rev": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
       "heroImage": {
         "type": "objectAttribute",
         "value": {
@@ -720,32 +786,17 @@
         },
         "optional": true
       },
-      "email": {
+      "headline": {
         "type": "objectAttribute",
         "value": {
           "type": "string"
         },
         "optional": false
       },
-      "socials": {
+      "subtext": {
         "type": "objectAttribute",
         "value": {
-          "type": "array",
-          "of": {
-            "type": "object",
-            "attributes": {
-              "_key": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                }
-              }
-            },
-            "rest": {
-              "type": "inline",
-              "name": "social"
-            }
-          }
+          "type": "string"
         },
         "optional": true
       }
