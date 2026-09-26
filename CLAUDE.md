@@ -1,14 +1,19 @@
 # jav-site
 
-Astro + Sanity template site.
+Site for the Journey Against Violence (JAV) organization, a Liberian rehabilitation program for former child soldiers, drug addicts, and criminals.
 
-## Principles
+## Design Principles
+
+**Simplicty**: The site should be extremely simple to read, navigate, and understand.
+**Mobile First**: The site should be mobile-first.
+**Responsive Design**: Ensure the site is responsive and works well on all devices.
+
+## Coding Principles
 
 **Type Safety**: Write type safe code to ensure correctness wherever possible.
 **Don't Repeat Yourself**: Don't unnecessarily redefine constants, helpers, and types locally if they could reasonably be used elsewhere. Derive types from existing types, including library types if applicable, wherever possible.
 **Conciseness**: Keep code and any wording concise and to the point.
 **Reduce comments**: Avoid comments unless required to explain unusual or complex logic. JSDoc is acceptable but keep it minimal.
-**Responsive Design**: Ensure the site is responsive and works well on all devices.
 
 ## Development Workflow
 
@@ -22,18 +27,6 @@ pnpm workspaces, Node >= 22.12.
 - **typecheck** — `pnpm typecheck`
 - **lint** — `pnpm lint` / `pnpm fix`
 - **codegen** — `pnpm codegen` after any Sanity schema or GROQ change
-
-### Validation Steps
-
-If changing more than a few lines, run these after completing all changes:
-
-1. pnpm fix
-2. pnpm typecheck
-
-### Running Exploratory Code
-
-For exploration or debugging, create `*.scratch.ts(x)` in the most convenient location, run it with
-tsx or typecheck it, and delete it when done.
 
 ## Architecture
 
