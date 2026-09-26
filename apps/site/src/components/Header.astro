@@ -5,7 +5,10 @@ const site = await getSite();
 const path = Astro.url.pathname;
 ---
 
-<header class="border-b border-border">
+<header
+	id="site-header"
+	class="sticky top-0 z-40 border-b border-border bg-paper focus-within:translate-y-0 data-hidden:-translate-y-full motion-safe:transition-transform motion-safe:duration-200"
+>
 	<div class="container-page flex h-16 items-center justify-between gap-6">
 		<a href="/" class="font-display text-h4 font-semibold tracking-tight">{site.name}</a>
 		<nav aria-label="Main">
@@ -30,3 +33,27 @@ const path = Astro.url.pathname;
 		</nav>
 	</div>
 </header>
+
+<script>
+	const header = document.getElementById("site-header");
+	if (header) {
+		let lastY = scrollY;
+		let ticking = false;
+		addEventListener(
+			"scroll",
+			() => {
+				if (ticking) return;
+				ticking = true;
+				requestAnimationFrame(() => {
+					const y = scrollY;
+					if (Math.abs(y - lastY) > 4) {
+						header.toggleAttribute("data-hidden", y > lastY && y > header.offsetHeight);
+						lastY = y;
+					}
+					ticking = false;
+				});
+			},
+			{ passive: true },
+		);
+	}
+</script>
