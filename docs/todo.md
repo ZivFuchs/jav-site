@@ -4,6 +4,10 @@ Palette
 Logo
 Theme
 
+## Page Layout
+
+Footer
+
 # Home Page
 
 Hero
@@ -21,3 +25,10 @@ How to accept money?
 Testimonies
 Projects
 Christ
+Sign up for newsletter
+
+# Deployment
+
+Buy domain
+Deploy staging, studio (auth-guarded)
+Deploy live (public)
