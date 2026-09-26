@@ -1,0 +1,149 @@
+---
+import { type ExperimentId, experiments, scopeOf } from "./registry";
+
+const ids = Object.keys(experiments) as ExperimentId[];
+const groups = [
+	["Site-wide", ids.filter((id) => scopeOf(id) === "global")],
+	["This page", ids.filter((id) => scopeOf(id) === "page")],
+] as const;
+---
+
+<button
+	id="x-toggle"
+	type="button"
+	popovertarget="x-panel"
+	hidden
+	class="fixed bottom-4 left-4 z-50 rounded-full bg-ink/80 px-3 py-1.5 text-eyebrow font-medium text-paper shadow-md hover:bg-ink"
+>
+	Experiments <span id="x-count"></span>
+</button>
+
+<div
+	id="x-panel"
+	popover
+	class="inset-auto bottom-16 left-4 m-0 w-72 max-w-[calc(100vw-2rem)] rounded-lg border border-border bg-paper p-4 text-small text-ink shadow-lg"
+>
+	{
+		groups.map(([title, groupIds]) => (
+			<section data-group class="mb-4">
+				<h2 class="text-eyebrow font-medium tracking-[0.12em] text-muted uppercase">{title}</h2>
+				{groupIds.map((id) => (
+					<fieldset data-exp={id} class="mt-2">
+						<legend class="font-medium">{experiments[id].label}</legend>
+						{Object.entries(experiments[id].variants).map(([v, label]) => (
+							<label class="mt-1 flex items-center gap-2">
+								<input type="radio" name={id} value={v} />
+								{label}
+							</label>
+						))}
+					</fieldset>
+				))}
+			</section>
+		))
+	}
+	<p id="x-empty" hidden class="mb-4 text-muted">No experiments on this page.</p>
+	<div class="flex flex-wrap items-center gap-3 border-t border-border pt-3">
+		<button id="x-copy" type="button" class="underline">Copy link</button>
+		<button id="x-reset" type="button" class="underline">Reset</button>
+		<label class="ml-auto flex items-center gap-1.5 text-muted">
+			<input id="x-show" type="checkbox" /> Button
+		</label>
+	</div>
+	<p class="mt-2 text-eyebrow text-muted">Alt+X toggles this panel.</p>
+</div>
+
+<script>
+	import { type ExperimentId, experiments, STORAGE_KEY, scopeOf, variantsOf } from "./registry";
+
+	const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+	const root = document.documentElement;
+	const toggle = $<HTMLButtonElement>("x-toggle");
+	const panel = $("x-panel");
+	const count = $("x-count");
+	const show = $<HTMLInputElement>("x-show");
+	const buttonKey = `${STORAGE_KEY}:button`;
+
+	const ids = Object.keys(experiments) as ExperimentId[];
+	const onPage = (id: ExperimentId) =>
+		scopeOf(id) === "global" || !!document.querySelector(`[data-x="${id}"]`);
+	const relevant = ids.filter(onPage);
+	const current = (id: ExperimentId) => root.getAttribute(`data-x-${id}`) ?? variantsOf(id)[0];
+	const isDefault = (id: ExperimentId) => current(id) === variantsOf(id)[0];
+
+	const storage = {
+		get: (key: string) => {
+			try {
+				return localStorage.getItem(key);
+			} catch {
+				return null;
+			}
+		},
+		set: (key: string, value: string) => {
+			try {
+				localStorage.setItem(key, value);
+			} catch {}
+		},
+	};
+
+	const sync = () => {
+		for (const id of ids) {
+			const input = panel.querySelector<HTMLInputElement>(
+				`input[name="${id}"][value="${current(id)}"]`,
+			);
+			if (input) input.checked = true;
+		}
+		const changed = relevant.filter((id) => !isDefault(id)).length;
+		count.textContent = changed ? `· ${changed}` : "";
+		storage.set(
+			STORAGE_KEY,
+			JSON.stringify(Object.fromEntries(ids.filter((id) => !isDefault(id)).map((id) => [id, current(id)]))),
+		);
+	};
+
+	for (const fieldset of panel.querySelectorAll<HTMLFieldSetElement>("[data-exp]")) {
+		fieldset.hidden = !relevant.includes(fieldset.dataset.exp as ExperimentId);
+	}
+	for (const group of panel.querySelectorAll<HTMLElement>("[data-group]")) {
+		group.hidden = !group.querySelector("[data-exp]:not([hidden])");
+	}
+	$("x-empty").hidden = relevant.length > 0;
+
+	panel.addEventListener("change", (e) => {
+		const input = e.target as HTMLInputElement;
+		if (input.type !== "radio") return;
+		root.setAttribute(`data-x-${input.name}`, input.value);
+		sync();
+	});
+
+	$("x-reset").addEventListener("click", () => {
+		for (const id of ids) root.setAttribute(`data-x-${id}`, variantsOf(id)[0]);
+		sync();
+	});
+
+	$("x-copy").addEventListener("click", async (e) => {
+		const url = new URL(location.href);
+		url.searchParams.set("x", relevant.map((id) => `${id}:${current(id)}`).join(","));
+		await navigator.clipboard.writeText(url.href);
+		const button = e.currentTarget as HTMLButtonElement;
+		button.textContent = "Copied";
+		setTimeout(() => {
+			button.textContent = "Copy link";
+		}, 1500);
+	});
+
+	show.checked = storage.get(buttonKey) !== "hidden";
+	toggle.hidden = !show.checked;
+	show.addEventListener("change", () => {
+		toggle.hidden = !show.checked;
+		storage.set(buttonKey, show.checked ? "shown" : "hidden");
+	});
+
+	document.addEventListener("keydown", (e) => {
+		if (e.altKey && e.code === "KeyX") {
+			e.preventDefault();
+			panel.togglePopover();
+		}
+	});
+
+	sync();
+</script>

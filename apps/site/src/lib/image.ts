@@ -6,6 +6,12 @@ const builder = createImageUrlBuilder({ projectId, dataset });
 
 export const urlFor = (source: SanityImageSource) => builder.image(source);
 
+export const imageUrl = (source: SanityImageSource, width: number) =>
+	urlFor(source).width(width).fit("max").auto("format").url();
+
+export const srcset = (source: SanityImageSource, widths: readonly number[]) =>
+	widths.map((w) => `${imageUrl(source, w)} ${w}w`).join(", ");
+
 /**
  * CSS `object-position` for the hotspot, in the coordinates of the delivered (crop-rect) image.
  * Use with `object-cover` when the box aspect is unknown, so the browser crops around the hotspot

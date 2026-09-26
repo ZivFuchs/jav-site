@@ -1,0 +1,42 @@
+---
+import { type ExperimentId, experiments, STORAGE_KEY, variantsOf } from "./registry";
+
+const ids = Object.keys(experiments) as ExperimentId[];
+const registry = Object.fromEntries(ids.map((id) => [id, variantsOf(id)]));
+const hide = (id: string, v: string) => `[data-x="${id}"]:not([data-v="${v}"])`;
+const rules = ids.flatMap((id) => {
+	const variants = variantsOf(id);
+	return [
+		`html:not([data-x-${id}]) ${hide(id, variants[0])}`,
+		...variants.map((v) => `html[data-x-${id}="${v}"] ${hide(id, v)}`),
+	];
+});
+const css = `[data-x]{display:contents}${rules.length ? `${rules.join(",")}{display:none}` : ""}`;
+---
+
+<style is:inline set:html={css}></style>
+<script is:inline define:vars={{ registry, key: STORAGE_KEY }}>
+	let picks = {};
+	try {
+		picks = JSON.parse(localStorage.getItem(key)) ?? {};
+	} catch {}
+	const url = new URL(location.href);
+	const shared = url.searchParams.get("x");
+	if (shared !== null) {
+		for (const pair of shared.split(",")) {
+			const [id, v] = pair.split(":");
+			if (id && v) picks[id] = v;
+		}
+		url.searchParams.delete("x");
+		history.replaceState(history.state, "", url);
+	}
+	const kept = {};
+	for (const [id, variants] of Object.entries(registry)) {
+		const v = variants.includes(picks[id]) ? picks[id] : variants[0];
+		document.documentElement.setAttribute(`data-x-${id}`, v);
+		if (v !== variants[0]) kept[id] = v;
+	}
+	try {
+		localStorage.setItem(key, JSON.stringify(kept));
+	} catch {}
+</script>

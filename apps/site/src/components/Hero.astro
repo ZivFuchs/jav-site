@@ -1,13 +1,11 @@
 ---
 import type { HOME_QUERY_RESULT } from "@jav/content";
 import Button from "@/components/Button.astro";
-import { focalPoint, urlFor } from "@/lib/image";
+import { focalPoint, imageUrl, srcset } from "@/lib/image";
 
-type Props = NonNullable<HOME_QUERY_RESULT>;
+type Props = Pick<NonNullable<HOME_QUERY_RESULT>, "heroImage" | "headline" | "subtext">;
 
 const { heroImage: image, headline, subtext } = Astro.props;
-const widths = [640, 1024, 1600, 2400];
-const src = (w: number) => (image ? urlFor(image).width(w).fit("max").auto("format").url() : "");
 ---
 
 <section
@@ -20,8 +18,8 @@ const src = (w: number) => (image ? urlFor(image).width(w).fit("max").auto("form
 		image && (
 			<>
 				<img
-					src={src(1600)}
-					srcset={widths.map((w) => `${src(w)} ${w}w`).join(", ")}
+					src={imageUrl(image, 1600)}
+					srcset={srcset(image, [640, 1024, 1600, 2400])}
 					sizes="100vw"
 					alt={image.alt ?? ""}
 					fetchpriority="high"

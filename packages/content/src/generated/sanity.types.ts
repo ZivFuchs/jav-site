@@ -148,6 +148,18 @@ export type Home = {
   };
   headline: string;
   subtext?: string;
+  about?: {
+    heading?: string;
+    body?: string;
+    image?: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+  };
 };
 
 export type SanityImagePaletteSwatch = {
@@ -285,7 +297,7 @@ export type SITE_SETTINGS_QUERY_RESULT = {
 
 // Source: ../../packages/content/src/queries.ts
 // Variable: HOME_QUERY
-// Query: *[_type == "home" && _id == "home"][0]{heroImage, headline, subtext}
+// Query: *[_type == "home" && _id == "home"][0]{heroImage, headline, subtext, about}
 export type HOME_QUERY_RESULT = {
   heroImage: {
     asset?: SanityImageAssetReference;
@@ -297,6 +309,18 @@ export type HOME_QUERY_RESULT = {
   } | null;
   headline: string;
   subtext: string | null;
+  about: {
+    heading?: string;
+    body?: string;
+    image?: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+  } | null;
 } | null;
 
 // Source: ../../packages/content/src/queries.ts
@@ -355,7 +379,7 @@ export type FAQ_QUERY_RESULT = Array<{
 declare global {
   interface SanityQueries {
     '*[_type == "siteSettings" && _id == "siteSettings"][0]{\n\tname, legalName, tagline, description, email, socials[]{label, url, icon}\n}': SITE_SETTINGS_QUERY_RESULT;
-    '*[_type == "home" && _id == "home"][0]{heroImage, headline, subtext}': HOME_QUERY_RESULT;
+    '*[_type == "home" && _id == "home"][0]{heroImage, headline, subtext, about}': HOME_QUERY_RESULT;
     '*[_type == "page" && defined(slug.current)]|order(coalesce(order, 9999) asc, title asc){\n\t_id, title, "slug": slug.current, summary, coverImage\n}': PAGES_QUERY_RESULT;
     '*[_type == "page" && defined(slug.current)].slug.current': PAGE_SLUGS_QUERY_RESULT;
     '*[_type == "page" && slug.current == $slug][0]{\n\t_id, title, "slug": slug.current, summary, coverImage, body, publishedAt\n}': PAGE_BY_SLUG_QUERY_RESULT;

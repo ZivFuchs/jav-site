@@ -1,6 +1,9 @@
 ---
 import Footer from "@/components/Footer.astro";
 import Header from "@/components/Header.astro";
+import ExperimentsHead from "@/experiments/Head.astro";
+import { experimentsEnabled } from "@/experiments/registry";
+import Toolbar from "@/experiments/Toolbar.astro";
 import { getSite } from "@/lib/site";
 import "@/styles/global.css";
 
@@ -37,6 +40,7 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site) : undefined;
 		<meta property="og:url" content={canonical} />
 		<meta name="twitter:card" content={ogImageUrl ? "summary_large_image" : "summary"} />
 		{ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+		{experimentsEnabled && <ExperimentsHead />}
 	</head>
 	<body class="flex min-h-dvh flex-col">
 		<a
@@ -53,5 +57,6 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site) : undefined;
 			</div>
 		</main>
 		<Footer />
+		{experimentsEnabled && <Toolbar />}
 	</body>
 </html>

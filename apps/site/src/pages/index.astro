@@ -1,6 +1,10 @@
 ---
 import { HOME_QUERY, PAGES_QUERY } from "@jav/content";
+import AboutBand from "@/components/about/AboutBand.astro";
+import AboutSplit from "@/components/about/AboutSplit.astro";
+import AboutStatement from "@/components/about/AboutStatement.astro";
 import Hero from "@/components/Hero.astro";
+import Experiment from "@/experiments/Experiment.astro";
 import Layout from "@/layouts/Layout.astro";
 import { sanity } from "@/lib/sanity";
 import { getSite } from "@/lib/site";
@@ -15,6 +19,16 @@ const [home, pages] = await Promise.all([sanity.fetch(HOME_QUERY), sanity.fetch(
 		heroImage={home?.heroImage ?? null}
 		headline={home?.headline ?? site.tagline}
 		subtext={home?.subtext ?? site.description}
+	/>
+
+	<Experiment
+		id="home-about"
+		variants={{ statement: AboutStatement, split: AboutSplit, band: AboutBand }}
+		props={{
+			heading: home?.about?.heading ?? "About Us",
+			body: home?.about?.body ?? site.description,
+			image: home?.about?.image ?? null,
+		}}
 	/>
 
 	{

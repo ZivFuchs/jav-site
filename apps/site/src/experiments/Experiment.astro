@@ -1,0 +1,26 @@
+---
+import { type ExperimentId, experimentsEnabled, type Variant, variantsOf } from "./registry";
+
+interface Props<K extends ExperimentId, P extends Record<string, unknown>> {
+	id: K;
+	variants: Record<Variant<K>, (props: P) => unknown>;
+	props: P;
+}
+
+const { id, variants, props } = Astro.props;
+const [first, ...rest] = variantsOf(id);
+const rendered = experimentsEnabled ? [first, ...rest] : [first];
+---
+
+{
+	rendered.map((v) => {
+		const Component = variants[v];
+		return experimentsEnabled ? (
+			<div data-x={id} data-v={v}>
+				<Component {...props} />
+			</div>
+		) : (
+			<Component {...props} />
+		);
+	})
+}

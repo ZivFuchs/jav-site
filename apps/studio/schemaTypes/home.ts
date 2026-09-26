@@ -26,6 +26,22 @@ export const home = defineType({
 			description: "One or two sentences under the headline",
 			validation: (rule) => rule.max(200),
 		}),
+		defineField({
+			name: "about",
+			title: "About section",
+			type: "object",
+			description: "Short introduction under the hero, linking to the About page",
+			fields: [
+				defineField({ name: "heading", type: "string", validation: (rule) => rule.max(80) }),
+				defineField({ name: "body", type: "text", rows: 4, validation: (rule) => rule.max(500) }),
+				defineField({
+					name: "image",
+					type: "image",
+					options: { hotspot: true },
+					fields: [defineField({ name: "alt", type: "string", title: "Alternative text" })],
+				}),
+			],
+		}),
 	],
 	preview: { select: { title: "headline", media: "heroImage" } },
 });

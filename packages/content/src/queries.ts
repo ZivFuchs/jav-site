@@ -6,7 +6,7 @@ export const SITE_SETTINGS_QUERY =
 }`);
 
 export const HOME_QUERY = defineQuery(
-	`*[_type == "home" && _id == "home"][0]{heroImage, headline, subtext}`,
+	`*[_type == "home" && _id == "home"][0]{heroImage, headline, subtext, about}`,
 );
 
 export const PAGES_QUERY =
