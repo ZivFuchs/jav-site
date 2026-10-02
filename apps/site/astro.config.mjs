@@ -8,7 +8,18 @@ export default defineConfig({
 	site: "https://example.com",
 	server: { port: 4323 },
 	adapter: cloudflare(),
-	integrations: [sitemap()],
+	integrations: [
+		sitemap(),
+		// The Cloudflare adapter clears the SSR dep cache on build/sync, which breaks a running dev server.
+		{
+			name: "separate-vite-cache",
+			hooks: {
+				"astro:config:setup": ({ command, updateConfig }) => {
+					if (command !== "dev") updateConfig({ vite: { cacheDir: "node_modules/.vite-build" } });
+				},
+			},
+		},
+	],
 	vite: {
 		plugins: [tailwindcss()],
 		resolve: {

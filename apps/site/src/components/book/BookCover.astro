@@ -1,0 +1,26 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { focalPoint, imageUrl, srcset } from "@/lib/image";
+import type { Book } from "./types";
+
+interface Props {
+	cover: NonNullable<Book["cover"]>;
+	title: string;
+	sizes: string;
+	loading?: HTMLAttributes<"img">["loading"];
+	class?: string;
+}
+
+const { cover, title, sizes, loading = "lazy", class: className } = Astro.props;
+---
+
+<img
+	src={imageUrl(cover, 480)}
+	srcset={srcset(cover, [240, 480, 720])}
+	sizes={sizes}
+	alt={cover.alt ?? `Cover of ${title}`}
+	loading={loading}
+	decoding="async"
+	class:list={["aspect-2/3 rounded-sm object-cover shadow-lg", className]}
+	style={{ objectPosition: focalPoint(cover) }}
+/>

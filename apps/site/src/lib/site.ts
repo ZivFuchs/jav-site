@@ -4,9 +4,13 @@ import { sanity } from "@/lib/sanity";
 /** Nav targets are files in src/pages, so routing stays in code. Sanity owns copy only. */
 export const nav = [
 	["/about", "About"],
+	["/projects", "Projects"],
 	["/faq", "FAQ"],
 	["/contact", "Contact"],
 ] as const;
+
+/** Redirects to the book's buy link, or shows a placeholder until one is set. */
+export const buyPath = "/book/buy";
 
 export type SiteSettings = NonNullable<SITE_SETTINGS_QUERY_RESULT>;
 

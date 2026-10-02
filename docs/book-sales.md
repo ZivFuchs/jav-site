@@ -24,6 +24,19 @@ Sales aren't donations. Buyers get no tax deduction, so no US charity is needed 
 2. Optionally sell the ebook directly via Lemon Squeezy.
 3. Before committing, confirm each platform can pay out to Liberia.
 
+## Decision
+
+KDP first, under a nonprofit-held account. Confirm KDP can pay out to Liberia (likely by wire, since
+EFT may not cover it). If it can't, use Draft2Digital for the ebook.
+
 ## Site
 
-Make `/book` a static page (cover, blurb, retailer links) with its content in Sanity.
+No checkout on the site. Amazon is the seller of record, so the site links out.
+
+- **Buy link:** one [books2read](https://books2read.com) universal link. It sends each reader to their
+  local Amazon store (and other retailers, if listed). It's free and needs a Draft2Digital account,
+  but not publishing through Draft2Digital.
+- **Content:** the `book` singleton in Sanity (title, cover, blurb, description, buy link).
+- **Pages:** `/book`, and the homepage hero once the `book` document is published.
+- **`/book/buy`:** what every buy button links to. Redirects to the buy link, or shows "Coming soon"
+  until it's set. Use it on print and social posts so the link never changes.

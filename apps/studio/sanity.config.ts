@@ -5,7 +5,7 @@ import { dataset, projectId } from "./env";
 import { schemaTypes } from "./schemaTypes";
 
 /** Types reached through a fixed document id, never created ad hoc. */
-const singletons = new Set(["home", "siteSettings"]);
+const singletons = new Set(["home", "book", "siteSettings"]);
 
 export default defineConfig({
 	name: "default",
@@ -24,6 +24,10 @@ export default defineConfig({
 							.title("Home")
 							.id("home")
 							.child(S.document().schemaType("home").documentId("home")),
+						S.listItem()
+							.title("Book")
+							.id("book")
+							.child(S.document().schemaType("book").documentId("book")),
 						S.listItem()
 							.title("Site Settings")
 							.id("siteSettings")

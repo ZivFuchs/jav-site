@@ -1,0 +1,52 @@
+---
+import { BOOK_QUERY } from "@jav/content";
+import Button from "@/components/Button.astro";
+import BookCover from "@/components/book/BookCover.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import Layout from "@/layouts/Layout.astro";
+import { imageUrl } from "@/lib/image";
+import { renderBlocks } from "@/lib/portableText";
+import { sanity } from "@/lib/sanity";
+import { buyPath } from "@/lib/site";
+
+const book = await sanity.fetch(BOOK_QUERY);
+---
+
+{
+	!book ? (
+		<Layout title="Book" noindex>
+			<PageHeader title="Book" lead="Coming soon." />
+		</Layout>
+	) : (
+		<Layout
+			title={book.title}
+			description={book.blurb}
+			ogImage={book.cover ? imageUrl(book.cover, 1200) : undefined}
+		>
+			<div class="grid gap-10 md:grid-cols-[1fr_16rem] md:gap-16">
+				<div>
+					<PageHeader title={book.title} lead={book.subtitle ?? book.blurb} />
+					<Button href={buyPath} class="mt-8">
+						Buy the book
+					</Button>
+					{book.body && <div class="prose mt-10" set:html={renderBlocks(book.body)} />}
+					<p class="mt-10 max-w-prose text-small text-muted">
+						Buying the book isn't a tax-deductible donation. To give directly, see
+						<a href="/support" class="underline underline-offset-4 hover:text-accent">Support Us</a>.
+					</p>
+				</div>
+				{
+					book.cover && (
+						<BookCover
+							cover={book.cover}
+							title={book.title}
+							sizes="(min-width: 48rem) 16rem, 12rem"
+							loading="eager"
+							class="order-first w-48 md:order-none md:w-full"
+						/>
+					)
+				}
+			</div>
+		</Layout>
+	)
+}

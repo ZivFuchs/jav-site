@@ -1,0 +1,60 @@
+---
+import { PROJECT_BY_SLUG_QUERY, PROJECT_SLUGS_QUERY } from "@jav/content";
+import PageHeader from "@/components/PageHeader.astro";
+import Layout from "@/layouts/Layout.astro";
+import { focalPoint, imageUrl, srcset } from "@/lib/image";
+import { sanity } from "@/lib/sanity";
+
+export async function getStaticPaths() {
+	const slugs = await sanity.fetch(PROJECT_SLUGS_QUERY);
+	return slugs.map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const project = await sanity.fetch(PROJECT_BY_SLUG_QUERY, { slug });
+if (!project) return Astro.rewrite("/404");
+
+const [lead, ...paragraphs] = project.description?.split(/\n\s*\n/) ?? [];
+const gallery = project.gallery ?? [];
+---
+
+<Layout
+	title={project.title}
+	description={lead}
+	ogImage={gallery[0] ? imageUrl(gallery[0], 1200) : undefined}
+>
+	<a href="/projects" class="text-small text-muted hover:text-accent-600">← All projects</a>
+	<PageHeader title={project.title} lead={lead} />
+	{
+		paragraphs.length > 0 && (
+			<div class="prose mt-10">
+				{paragraphs.map((p) => <p>{p}</p>)}
+			</div>
+		)
+	}
+	{
+		gallery.length > 0 && (
+			<ul class="mt-12 grid gap-4 sm:grid-cols-2">
+				{gallery.map((image, i) => (
+					<li class:list={{ "sm:col-span-2": i === 0 }}>
+						<figure>
+							<a href={imageUrl(image, 2000)}>
+								<img
+									src={imageUrl(image, 800)}
+									srcset={srcset(image, [480, 800, 1200, 1600])}
+									sizes={i === 0 ? "(min-width: 80rem) 76rem, 100vw" : "(min-width: 80rem) 38rem, (min-width: 40rem) 50vw, 100vw"}
+									alt={image.alt ?? ""}
+									loading={i === 0 ? "eager" : "lazy"}
+									decoding="async"
+									class:list={["w-full rounded-lg object-cover", i === 0 ? "aspect-video" : "aspect-4/3"]}
+									style={{ objectPosition: focalPoint(image) }}
+								/>
+							</a>
+							{image.caption && <figcaption class="mt-2 text-small text-muted">{image.caption}</figcaption>}
+						</figure>
+					</li>
+				))}
+			</ul>
+		)
+	}
+</Layout>

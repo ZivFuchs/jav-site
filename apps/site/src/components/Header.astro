@@ -5,29 +5,28 @@ import { getSite, nav } from "@/lib/site";
 
 const site = await getSite();
 const path = Astro.url.pathname;
+const links = nav.map(([href, label]) => ({ href, label, current: path === href }));
 ---
 
 <header
 	id="site-header"
-	class="sticky top-0 z-40 border-b border-border bg-paper focus-within:translate-y-0 data-hidden:-translate-y-full motion-safe:transition-transform motion-safe:duration-200"
+	data-keep-motion
+	class="sticky top-0 z-40 border-b border-border bg-paper focus-within:translate-y-0 data-hidden:-translate-y-full transition-transform duration-200"
 >
 	<div class="container-page flex h-16 items-center justify-between gap-6">
 		<a href="/" class="flex items-center gap-2.5 font-display text-body leading-tight font-semibold tracking-tight sm:text-h4">
 			<Experiment id="logo-size" component={Logo} />
-			{site.legalName}
+			{site.name}
 		</a>
 		<nav aria-label="Main">
-			<ul class="flex items-center gap-4 text-small sm:gap-6">
+			<ul class="hidden items-center gap-6 text-small sm:flex">
 				{
-					nav.map(([href, label]) => (
+					links.map(({ href, label, current }) => (
 						<li>
 							<a
 								href={href}
-								aria-current={path === href ? "page" : undefined}
-								class:list={[
-									"transition-colors hover:text-accent-600",
-									path === href ? "text-ink" : "text-muted",
-								]}
+								aria-current={current ? "page" : undefined}
+								class:list={["transition-colors hover:text-accent-600", current ? "text-ink" : "text-muted"]}
 							>
 								{label}
 							</a>
@@ -35,6 +34,30 @@ const path = Astro.url.pathname;
 					))
 				}
 			</ul>
+			<details class="group sm:hidden">
+				<summary class="-mr-2 flex size-11 cursor-pointer list-none items-center justify-center text-ink [&::-webkit-details-marker]:hidden">
+					<span class="sr-only">Menu</span>
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+						<path class="group-open:hidden" d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.75" />
+						<path class="hidden group-open:block" d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.75" />
+					</svg>
+				</summary>
+				<ul class="absolute inset-x-0 top-full divide-y divide-border border-b border-rule bg-surface shadow-lg">
+					{
+						links.map(({ href, label, current }) => (
+							<li>
+								<a
+									href={href}
+									aria-current={current ? "page" : undefined}
+									class:list={["container-page block py-4 text-body", current ? "font-semibold text-accent-600" : "text-ink"]}
+								>
+									{label}
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</details>
 		</nav>
 	</div>
 </header>

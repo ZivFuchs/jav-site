@@ -8,8 +8,7 @@ interface Props extends Pick<HTMLAttributes<"a">, "href" | "target" | "rel"> {
 }
 
 const variants = {
-	primary:
-		"animate-halo bg-linear-to-b from-accent-300 to-accent-400 text-paper text-shadow-md text-shadow-ink/35 hover:to-accent-300",
+	primary: "animate-halo bg-linear-to-b from-accent-300 to-accent-400 text-ink hover:to-accent-300",
 	ghost: "border border-rule text-ink hover:bg-neutral-100",
 	/** Ghost for dark or photographic backgrounds. */
 	light: "border border-paper/70 text-paper hover:bg-paper/10",

@@ -1,0 +1,39 @@
+---
+import Button from "@/components/Button.astro";
+import { renderBlocks } from "@/lib/portableText";
+import { buyPath } from "@/lib/site";
+import BookCover from "./BookCover.astro";
+import type { Book } from "./types";
+
+type Props = Pick<Book, "title" | "subtitle" | "cover" | "blurb" | "body">;
+
+const { title, subtitle, cover, blurb, body } = Astro.props;
+---
+
+<section class="flex items-center border-b border-border bg-surface md:min-h-[80svh]">
+	<div
+		class="container-page grid items-center gap-5 py-6 md:grid-cols-[auto_1fr] md:gap-16 md:py-24"
+	>
+		{
+			cover && (
+				<BookCover
+					cover={cover}
+					title={title}
+					sizes="(min-width: 48rem) 20rem, 16rem"
+					loading="eager"
+					class="h-[clamp(10rem,100svh-22rem,24rem)] justify-self-center md:h-auto md:w-80 md:justify-self-start"
+				/>
+			)
+		}
+		<div>
+			<h1 class:list={["max-w-3xl text-h1", cover && "sr-only"]}>{title}</h1>
+			{subtitle && <p class="mt-2 text-h3 text-muted">{subtitle}</p>}
+			<p class:list={["max-w-prose text-lead text-neutral-800", !cover && "mt-3 md:mt-6"]}>{blurb}</p>
+			{body && <div class="prose mt-6 hidden max-w-prose md:block" set:html={renderBlocks(body)} />}
+			<div class="mt-5 grid grid-cols-2 gap-3 sm:flex md:mt-8">
+				<Button href={buyPath}>Buy the book</Button>
+				<Button href="/book" variant="ghost">Learn more</Button>
+			</div>
+		</div>
+	</div>
+</section>

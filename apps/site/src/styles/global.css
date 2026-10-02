@@ -142,7 +142,8 @@
 		html {
 			scroll-behavior: auto;
 		}
-		*,
+		/* data-keep-motion opts out, for small movements that aid orientation. */
+		*:not([data-keep-motion]),
 		*::before,
 		*::after {
 			/* biome-ignore-start lint/complexity/noImportantStyles: reduced-motion reset must outrank utility animations */

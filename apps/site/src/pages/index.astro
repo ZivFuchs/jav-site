@@ -1,25 +1,39 @@
 ---
-import { HOME_QUERY, PAGES_QUERY } from "@jav/content";
+import { BOOK_QUERY, HOME_QUERY, PAGES_QUERY, PROJECTS_QUERY } from "@jav/content";
 import AboutBand from "@/components/about/AboutBand.astro";
 import AboutSplit from "@/components/about/AboutSplit.astro";
 import AboutStatement from "@/components/about/AboutStatement.astro";
+import Button from "@/components/Button.astro";
+import BookHero from "@/components/book/BookHero.astro";
 import Hero from "@/components/Hero.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
 import Experiment from "@/experiments/Experiment.astro";
 import Layout from "@/layouts/Layout.astro";
 import { sanity } from "@/lib/sanity";
 import { getSite } from "@/lib/site";
 
 const site = await getSite();
-const [home, pages] = await Promise.all([sanity.fetch(HOME_QUERY), sanity.fetch(PAGES_QUERY)]);
+const [home, book, pages, projects] = await Promise.all([
+	sanity.fetch(HOME_QUERY),
+	sanity.fetch(BOOK_QUERY),
+	sanity.fetch(PAGES_QUERY),
+	sanity.fetch(PROJECTS_QUERY),
+]);
 ---
 
 <Layout title={`${site.legalName} — ${site.tagline}`}>
-	<Hero
-		slot="hero"
-		heroImage={home?.heroImage ?? null}
-		headline={home?.headline ?? site.tagline}
-		subtext={home?.subtext ?? site.description}
-	/>
+	{
+		book ? (
+			<BookHero slot="hero" {...book} />
+		) : (
+			<Hero
+				slot="hero"
+				heroImage={home?.heroImage ?? null}
+				headline={home?.headline ?? site.tagline}
+				subtext={home?.subtext ?? site.description}
+			/>
+		)
+	}
 
 	<Experiment
 		id="home-about"
@@ -30,6 +44,27 @@ const [home, pages] = await Promise.all([sanity.fetch(HOME_QUERY), sanity.fetch(
 			image: home?.about?.image ?? null,
 		}}
 	/>
+
+	{
+		projects.length > 0 && (
+			<section class="py-12 md:py-16">
+				<div class="flex items-end justify-between gap-6">
+					<h2 class="text-h2">Our projects</h2>
+					<a href="/projects" class="hidden text-small text-muted hover:text-accent-600 sm:block">
+						All projects →
+					</a>
+				</div>
+				<ul class="mt-8 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+					{projects.slice(0, 3).map((project) => (
+						<ProjectCard {...project} heading="h3" />
+					))}
+				</ul>
+				<Button href="/projects" variant="ghost" class="mt-8 sm:hidden">
+					All projects
+				</Button>
+			</section>
+		)
+	}
 
 	{
 		pages.length > 0 && (

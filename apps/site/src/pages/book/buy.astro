@@ -1,0 +1,35 @@
+---
+import { BOOK_QUERY } from "@jav/content";
+import Button from "@/components/Button.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import Layout from "@/layouts/Layout.astro";
+import { sanity } from "@/lib/sanity";
+
+const book = await sanity.fetch(BOOK_QUERY);
+---
+
+{
+	book?.buyUrl ? (
+		<html lang="en">
+			<head>
+				<meta charset="utf-8" />
+				<meta http-equiv="refresh" content={`0;url=${book.buyUrl}`} />
+				<meta name="robots" content="noindex" />
+				<title>Redirecting…</title>
+			</head>
+			<body>
+				<a href={book.buyUrl}>Continue to the store</a>
+			</body>
+		</html>
+	) : (
+		<Layout title="Coming soon" noindex>
+			<PageHeader
+				title="Coming soon"
+				lead={`${book?.title ?? "The book"} isn't on sale yet. Check back soon.`}
+			/>
+			<Button href="/book" variant="ghost" class="mt-10">
+				Back to the book
+			</Button>
+		</Layout>
+	)
+}

@@ -70,25 +70,25 @@ export type FaqItem = {
   order?: number;
 };
 
-export type Page = {
+export type Project = {
   _id: string;
-  _type: "page";
+  _type: "project";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
   title: string;
   slug: Slug;
-  summary?: string;
-  coverImage?: {
+  description: string;
+  gallery?: Array<{
     asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     alt?: string;
+    caption?: string;
     _type: "image";
-  };
-  body?: BlockContent;
-  publishedAt?: string;
+    _key: string;
+  }>;
   order?: number;
 };
 
@@ -114,6 +114,28 @@ export type Slug = {
   source?: string;
 };
 
+export type Page = {
+  _id: string;
+  _type: "page";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  summary?: string;
+  coverImage?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  body?: BlockContent;
+  publishedAt?: string;
+  order?: number;
+};
+
 export type SiteSettings = {
   _id: string;
   _type: "siteSettings";
@@ -130,6 +152,27 @@ export type SiteSettings = {
       _key: string;
     } & Social
   >;
+};
+
+export type Book = {
+  _id: string;
+  _type: "book";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  subtitle?: string;
+  cover?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  blurb: string;
+  body?: BlockContent;
+  buyUrl?: string;
 };
 
 export type Home = {
@@ -264,11 +307,13 @@ export type AllSanitySchemaTypes =
   | SanityImageAssetReference
   | BlockContent
   | FaqItem
-  | Page
+  | Project
   | SanityImageCrop
   | SanityImageHotspot
   | Slug
+  | Page
   | SiteSettings
+  | Book
   | Home
   | SanityImagePaletteSwatch
   | SanityImagePalette
@@ -324,6 +369,25 @@ export type HOME_QUERY_RESULT = {
 } | null;
 
 // Source: ../../packages/content/src/queries.ts
+// Variable: BOOK_QUERY
+// Query: *[_type == "book" && _id == "book"][0]{title, subtitle, cover, blurb, body, buyUrl}
+export type BOOK_QUERY_RESULT = {
+  title: string;
+  subtitle: string | null;
+  cover: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  } | null;
+  blurb: string;
+  body: BlockContent | null;
+  buyUrl: string | null;
+} | null;
+
+// Source: ../../packages/content/src/queries.ts
 // Variable: PAGES_QUERY
 // Query: *[_type == "page" && defined(slug.current)]|order(coalesce(order, 9999) asc, title asc){	_id, title, "slug": slug.current, summary, coverImage}
 export type PAGES_QUERY_RESULT = Array<{
@@ -375,15 +439,61 @@ export type FAQ_QUERY_RESULT = Array<{
   answer: BlockContent;
 }>;
 
+// Source: ../../packages/content/src/queries.ts
+// Variable: PROJECTS_QUERY
+// Query: *[_type == "project" && defined(slug.current)]|order(coalesce(order, 9999) asc, title asc){	title, "slug": slug.current, description, "cover": gallery[0]}
+export type PROJECTS_QUERY_RESULT = Array<{
+  title: string;
+  slug: string;
+  description: string;
+  cover: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    caption?: string;
+    _type: "image";
+    _key: string;
+  } | null;
+}>;
+
+// Source: ../../packages/content/src/queries.ts
+// Variable: PROJECT_SLUGS_QUERY
+// Query: *[_type == "project" && defined(slug.current)].slug.current
+export type PROJECT_SLUGS_QUERY_RESULT = Array<string>;
+
+// Source: ../../packages/content/src/queries.ts
+// Variable: PROJECT_BY_SLUG_QUERY
+// Query: *[_type == "project" && slug.current == $slug][0]{	title, description, gallery}
+export type PROJECT_BY_SLUG_QUERY_RESULT = {
+  title: string;
+  description: string;
+  gallery: Array<{
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    caption?: string;
+    _type: "image";
+    _key: string;
+  }> | null;
+} | null;
+
 // Query TypeMap
 declare global {
   interface SanityQueries {
     '*[_type == "siteSettings" && _id == "siteSettings"][0]{\n\tname, legalName, tagline, description, email, socials[]{label, url, icon}\n}': SITE_SETTINGS_QUERY_RESULT;
     '*[_type == "home" && _id == "home"][0]{heroImage, headline, subtext, about}': HOME_QUERY_RESULT;
+    '*[_type == "book" && _id == "book"][0]{title, subtitle, cover, blurb, body, buyUrl}': BOOK_QUERY_RESULT;
     '*[_type == "page" && defined(slug.current)]|order(coalesce(order, 9999) asc, title asc){\n\t_id, title, "slug": slug.current, summary, coverImage\n}': PAGES_QUERY_RESULT;
     '*[_type == "page" && defined(slug.current)].slug.current': PAGE_SLUGS_QUERY_RESULT;
     '*[_type == "page" && slug.current == $slug][0]{\n\t_id, title, "slug": slug.current, summary, coverImage, body, publishedAt\n}': PAGE_BY_SLUG_QUERY_RESULT;
     '*[_type == "faqItem" && defined(answer)]|order(coalesce(order, 9999) asc, question asc){\n\t_id, question, answer\n}': FAQ_QUERY_RESULT;
+    '*[_type == "project" && defined(slug.current)]|order(coalesce(order, 9999) asc, title asc){\n\ttitle, "slug": slug.current, description, "cover": gallery[0]\n}': PROJECTS_QUERY_RESULT;
+    '*[_type == "project" && defined(slug.current)].slug.current': PROJECT_SLUGS_QUERY_RESULT;
+    '*[_type == "project" && slug.current == $slug][0]{\n\ttitle, description, gallery\n}': PROJECT_BY_SLUG_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

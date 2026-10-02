@@ -1,0 +1,31 @@
+---
+import type { PROJECTS_QUERY_RESULT } from "@jav/content";
+import { focalPoint, imageUrl, srcset } from "@/lib/image";
+
+type Props = PROJECTS_QUERY_RESULT[number] & { heading?: "h2" | "h3" };
+
+const { title, slug, description, cover, heading: Heading = "h2" } = Astro.props;
+---
+
+<li class="group relative">
+	{
+		cover && (
+			<img
+				src={imageUrl(cover, 480)}
+				srcset={srcset(cover, [320, 480, 720])}
+				sizes="(min-width: 64rem) 25rem, (min-width: 40rem) 50vw, 100vw"
+				alt={cover.alt ?? ""}
+				loading="lazy"
+				decoding="async"
+				class="aspect-4/3 w-full rounded-lg object-cover"
+				style={{ objectPosition: focalPoint(cover) }}
+			/>
+		)
+	}
+	<Heading class="mt-4 text-h3">
+		<a href={`/projects/${slug}`} class="after:absolute after:inset-0 group-hover:text-accent-600">
+			{title}
+		</a>
+	</Heading>
+	<p class="mt-2 line-clamp-3 text-muted">{description}</p>
+</li>
