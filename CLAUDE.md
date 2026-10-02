@@ -23,8 +23,9 @@ pnpm workspaces, Node >= 22.12.
 ### Commands
 
 - **dev** — `pnpm dev`
-- **deploy** — site: `pnpm build` then `pnpm --filter site deploy` (the deploy script is bare
-  `wrangler deploy`, so an un-built `dist/` ships stale). Studio: `pnpm --filter studio deploy`.
+- **deploy** — site: `pnpm build` then `pnpm --filter site run deploy` (the deploy script is bare
+  `wrangler deploy`, so an un-built `dist/` ships stale). Studio: `pnpm --filter studio run deploy`.
+  `run` is required: bare `pnpm deploy` is a pnpm builtin that shadows the script.
 - **typecheck** — `pnpm typecheck`
 - **lint** — `pnpm lint` / `pnpm fix`
 - **codegen** — `pnpm codegen` after any Sanity schema or GROQ change
