@@ -26,7 +26,7 @@ const { heroImage: image, headline, subtext } = Astro.props;
 					class="absolute inset-0 -z-10 size-full object-cover"
 					style={{ objectPosition: focalPoint(image) }}
 				/>
-				<div class="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-linear-to-t from-ink/60 to-transparent" />
+				<div class="absolute inset-0 -z-10 bg-linear-to-t from-ink/85 via-ink/50 to-ink/10" />
 			</>
 		)
 	}
@@ -34,7 +34,7 @@ const { heroImage: image, headline, subtext } = Astro.props;
 		<h1 class="max-w-3xl text-h1">{headline}</h1>
 		{
 			subtext && (
-				<p class:list={["mt-4 max-w-prose text-lead md:mt-6", image ? "text-paper/85" : "text-muted"]}>
+				<p class:list={["mt-4 max-w-prose text-lead md:mt-6", image ? "text-paper" : "text-muted"]}>
 					{subtext}
 				</p>
 			)
