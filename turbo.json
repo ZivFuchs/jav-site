@@ -1,0 +1,16 @@
+{
+	"$schema": "https://turborepo.com/schema.json",
+	"envMode": "loose",
+	"tasks": {
+		"typecheck": {
+			"cache": false
+		},
+		"build": {
+			"cache": false
+		},
+		"dev": {
+			"cache": false,
+			"persistent": true
+		}
+	}
+}

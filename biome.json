@@ -1,61 +1,18 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.5.13/schema.json",
-	"vcs": {
-		"enabled": true,
-		"clientKind": "git",
-		"useIgnoreFile": true
-	},
+	"$schema": "https://biomejs.dev/schemas/2.5.14/schema.json",
+	"extends": ["@zivfuchs/toolchain/biome"],
 	"files": {
-		"ignoreUnknown": true,
 		"includes": [
-			"**",
 			"!**/dist",
 			"!**/.astro",
 			"!**/.wrangler",
 			"!**/.sanity",
-			"!packages/content/src/generated",
-			"!apps/studio/schema.json",
 			"!**/pnpm-lock.yaml",
-			"!**/public"
+			"!**/public",
+			"!packages/content/src/generated",
+			"!apps/studio/schema.json"
 		]
 	},
-	"formatter": {
-		"enabled": true,
-		"indentStyle": "tab",
-		"lineWidth": 100
-	},
-	"linter": {
-		"enabled": true,
-		"rules": {
-			"preset": "recommended"
-		}
-	},
-	"javascript": {
-		"formatter": {
-			"quoteStyle": "double"
-		}
-	},
-	"assist": {
-		"enabled": true,
-		"actions": {
-			"source": {
-				"organizeImports": "on"
-			}
-		}
-	},
-	"overrides": [
-		{
-			"includes": ["**/*.astro"],
-			"linter": {
-				"rules": {
-					"correctness": {
-						"noUnusedVariables": "off",
-						"noUnusedImports": "off"
-					}
-				}
-			}
-		}
-	],
 	"css": {
 		"parser": {
 			"tailwindDirectives": true

@@ -1,21 +1,3 @@
 {
-	"compilerOptions": {
-		"strict": true,
-		"target": "ES2022",
-		"module": "ESNext",
-		"moduleResolution": "bundler",
-		"lib": ["ES2023", "DOM", "DOM.Iterable"],
-		"verbatimModuleSyntax": true,
-		"isolatedModules": true,
-		"esModuleInterop": true,
-		"skipLibCheck": true,
-		"resolveJsonModule": true,
-		"noEmit": true,
-		"noUncheckedIndexedAccess": true,
-		"exactOptionalPropertyTypes": true,
-		"noImplicitOverride": true,
-		"noFallthroughCasesInSwitch": true,
-		"forceConsistentCasingInFileNames": true,
-		"allowImportingTsExtensions": true
-	}
+	"extends": "@zivfuchs/toolchain/tsconfig.base.json"
 }

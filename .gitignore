@@ -16,3 +16,4 @@ apps/studio/.sanity/
 apps/studio/dist/
 
 apps/site/.dev.vars
+.turbo/

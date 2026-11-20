@@ -4,18 +4,22 @@
 	"type": "module",
 	"packageManager": "pnpm@11.21.0",
 	"engines": {
-		"node": ">=22.12"
+		"node": ">=24"
 	},
 	"scripts": {
-		"dev": "pnpm -r --parallel dev",
-		"build": "pnpm -r build",
-		"typecheck": "pnpm -r typecheck",
+		"dev": "turbo run dev",
+		"build": "turbo run build",
+		"typecheck": "turbo run typecheck",
 		"lint": "biome check .",
 		"fix": "biome check --write .",
-		"codegen": "pnpm --filter studio typegen"
+		"codegen": "pnpm --filter studio typegen",
+		"analyze": "fallow"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.5.12",
-		"typescript": "^6.0.3"
+		"@biomejs/biome": "2.5.14",
+		"@zivfuchs/toolchain": "link:../../site-kit/main/packages/toolchain",
+		"fallow": "3.28.0",
+		"turbo": "2.11.13",
+		"typescript": "6.0.3"
 	}
 }
