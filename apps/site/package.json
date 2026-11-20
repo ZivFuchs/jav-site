@@ -19,6 +19,8 @@
 		"@portabletext/to-html": "^6.0.0",
 		"@sanity/image-url": "^2.1.1",
 		"@tailwindcss/vite": "^4.3.3",
+		"@zivfuchs/astro": "link:../../../../site-kit/main/packages/astro",
+		"@zivfuchs/sanity": "link:../../../../site-kit/main/packages/sanity",
 		"astro": "^7.3.1",
 		"tailwindcss": "^4.3.3"
 	},

@@ -18,7 +18,7 @@ const { title, slug, description, cover, heading: Heading = "h2" } = Astro.props
 				loading="lazy"
 				decoding="async"
 				class="aspect-4/3 w-full rounded-lg object-cover"
-				style={{ objectPosition: focalPoint(cover) }}
+				style={{ objectPosition: focalPoint(cover.hotspot, cover.crop) }}
 			/>
 		)
 	}

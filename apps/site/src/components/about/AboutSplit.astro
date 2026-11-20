@@ -25,7 +25,7 @@ const { heading, body, image } = Astro.props;
 				loading="lazy"
 				decoding="async"
 				class="aspect-4/3 w-full rounded-lg object-cover"
-				style={{ objectPosition: focalPoint(image) }}
+				style={{ objectPosition: focalPoint(image.hotspot, image.crop) }}
 			/>
 		)
 	}

@@ -17,7 +17,9 @@ Site for the Journey Against Violence (JAV) organization, a Liberian rehabilitat
 
 ## Development Workflow
 
-pnpm workspaces, Node >= 22.12.
+pnpm workspaces and Turbo, Node 24 (`.nvmrc`). Built on site-kit (`../../site-kit/main`, linked with `link:`):
+toolchain presets, `@zivfuchs/sanity` (client config, `focalPoint`) and `@zivfuchs/astro` (`buildCache`, `linkedKit`).
+CI calls the kit's `site-ci.yml`, which needs the `SITE_KIT_SSH_KEY` secret. A generic fix belongs in the kit.
 
 ### Commands
 

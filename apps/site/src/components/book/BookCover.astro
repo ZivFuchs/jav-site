@@ -22,5 +22,5 @@ const { cover, title, sizes, loading = "lazy", class: className } = Astro.props;
 	loading={loading}
 	decoding="async"
 	class:list={["aspect-2/3 rounded-sm object-cover shadow-lg", className]}
-	style={{ objectPosition: focalPoint(cover) }}
+	style={{ objectPosition: focalPoint(cover.hotspot, cover.crop) }}
 />

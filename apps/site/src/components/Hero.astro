@@ -24,7 +24,7 @@ const { heroImage: image, headline, subtext } = Astro.props;
 					alt={image.alt ?? ""}
 					fetchpriority="high"
 					class="absolute inset-0 -z-10 size-full object-cover"
-					style={{ objectPosition: focalPoint(image) }}
+					style={{ objectPosition: focalPoint(image.hotspot, image.crop) }}
 				/>
 				<div class="absolute inset-0 -z-10 bg-linear-to-t from-ink/85 via-ink/50 to-ink/10" />
 			</>

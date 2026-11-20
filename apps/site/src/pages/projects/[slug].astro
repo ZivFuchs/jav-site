@@ -47,7 +47,7 @@ const gallery = project.gallery ?? [];
 									loading={i === 0 ? "eager" : "lazy"}
 									decoding="async"
 									class:list={["w-full rounded-lg object-cover", i === 0 ? "aspect-video" : "aspect-4/3"]}
-									style={{ objectPosition: focalPoint(image) }}
+									style={{ objectPosition: focalPoint(image.hotspot, image.crop) }}
 								/>
 							</a>
 							{image.caption && <figcaption class="mt-2 text-small text-muted">{image.caption}</figcaption>}

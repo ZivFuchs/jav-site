@@ -49,6 +49,12 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.3.3
         version: 4.3.3(vite@8.3.0(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.1))
+      '@zivfuchs/astro':
+        specifier: link:../../../../site-kit/main/packages/astro
+        version: link:../../../../site-kit/main/packages/astro
+      '@zivfuchs/sanity':
+        specifier: link:../../../../site-kit/main/packages/sanity
+        version: link:../../../../site-kit/main/packages/sanity
       astro:
         specifier: ^7.3.1
         version: 7.3.2(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.1)
@@ -96,6 +102,9 @@ importers:
       '@sanity/client':
         specifier: 8.5.0
         version: 8.5.0
+      '@zivfuchs/sanity':
+        specifier: link:../../../../site-kit/main/packages/sanity
+        version: link:../../../../site-kit/main/packages/sanity
       groq:
         specifier: 6.12.0
         version: 6.12.0
