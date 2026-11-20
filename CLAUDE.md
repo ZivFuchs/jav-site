@@ -5,8 +5,7 @@ Site for the Journey Against Violence (JAV) organization, a Liberian rehabilitat
 ## Design Principles
 
 **Simplicty**: The site should be extremely simple to read, navigate, and understand.
-**Mobile First**: The site should be mobile-first.
-**Responsive Design**: Ensure the site is responsive and works well on all devices.
+**Mobile First, Desktop Too**: Design for phones first, then scale up. Desktop is fully supported, not an afterthought. Ensure it works well on all devices.
 **Low Data Friendly**: The site should be low data friendly, with minimal data usage.
 
 ## Coding Principles
